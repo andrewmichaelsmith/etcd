@@ -19,7 +19,7 @@ var (
 	timeout = flag.Duration("timeout", 10*time.Second, "Request Timeout")
 	laddr   = flag.String("l", ":8080", "HTTP service address (e.g., ':8080')")
 
-	peers = etcdhttp.Peers{}
+	peers = &etcdhttp.Peers{}
 )
 
 func init() {
@@ -46,7 +46,7 @@ func main() {
 		Store:  store.New(),
 		Node:   n,
 		Save:   func(st raftpb.State, ents []raftpb.Entry) {}, // TODO: use wal
-		Send:   etcdhttp.Sender(peers),
+		Send:   etcdhttp.Sender(*peers),
 		Ticker: tk.C,
 	}
 	etcdserver.Start(s)
